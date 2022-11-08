@@ -4,6 +4,7 @@ import execjs
 import scrapy
 import pandas as pd
 from fake_useragent import UserAgent
+import re
 
 
 class CommentspiderSpider(scrapy.Spider):
@@ -45,7 +46,13 @@ class CommentspiderSpider(scrapy.Spider):
             reviewAllDOList = data['reviewAllDOList']
             for reviewDataVO in reviewAllDOList:
                 # 评论体
-                print(reviewDataVO['reviewDataVO']['reviewData']['reviewBody'])
+                repl = reviewDataVO['reviewDataVO']['reviewData']['reviewBody']
+                # print(repl)
+                # print(repl)
+                repl = re.sub('<svgmtsi class="review">', '', reviewDataVO['reviewDataVO']['reviewData']['reviewBody'])
+                repl = re.sub('</svgmtsi>', '', repl)
+                repl = re.sub(r'<br />', '', repl, re.DOTALL)
+                print(repl)
             # print(reviewAllDOList)
             with open('data.json', 'w', encoding='utf-8') as fp:
                 json.dump(data, fp, ensure_ascii=False)
