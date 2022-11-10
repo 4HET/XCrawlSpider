@@ -6,12 +6,30 @@ import pandas as pd
 from fake_useragent import UserAgent
 import re
 
+from XCrawlSpider.XCrawlSpider.items import XcrawlspiderItem
+
 
 class CommentspiderSpider(scrapy.Spider):
     name = 'commentSpider'
     # allowed_domains = ['www.xxx.com']
-    start_urls = ['https://www.dianping.com/shop/H3hlnKQfgGAPlJG9',
-                  # 'https://www.dianping.com/shop/l2N3z4oFLOk7WGqB',
+    start_urls = [
+        'https://www.dianping.com/shop/l2N3z4oFLOk7WGqB',
+# 'https://www.dianping.com/shop/karMHeOL385peKUI',
+# 'https://www.dianping.com/shop/k5Z182onb82QSoTC',
+# 'https://www.dianping.com/shop/l5CHs4FzFlbjO3Mv',
+# 'https://www.dianping.com/shop/H75mvLz9ndnTu0CO',
+# 'https://www.dianping.com/shop/Ha7ZHpNpZSP3rWDP',
+# 'https://www.dianping.com/shop/G9I488Usw4w3etHO',
+# 'https://www.dianping.com/shop/H5SkrI00caDjLDLx',
+# 'https://www.dianping.com/shop/G9gLh8Xzu6vF8YLh',
+# 'https://www.dianping.com/shop/k8KMW3Auu4u5ejHG',
+# 'https://www.dianping.com/shop/k3CbLChnx77zvDPY',
+# 'https://www.dianping.com/shop/H9jC5kR5k62n4ORv',
+# 'https://www.dianping.com/shop/EWa0dfaBc833Xlq9',
+# 'https://www.dianping.com/shop/G1IGDTs5QBpnBvah',
+# 'https://www.dianping.com/shop/G25nCMYY0mmTIqbO',
+                # 'https://www.dianping.com/shop/H3hlnKQfgGAPlJG9',
+                #   'https://www.dianping.com/shop/l2N3z4oFLOk7WGqB',
                   # 'https://www.dianping.com/shop/H37lWh9emnhXz7LY'
                   ]
 
@@ -41,19 +59,28 @@ class CommentspiderSpider(scrapy.Spider):
         if code != 200:
             url = response.meta['url']
             headers = response.meta['headers']
+            print(data)
             yield scrapy.Request(url=url, headers=headers, callback=self.parse, meta={'url': url, 'headers': headers})
         else:
+            item = XcrawlspiderItem.items()
+            mid_re = []
+
             reviewAllDOList = data['reviewAllDOList']
             for reviewDataVO in reviewAllDOList:
                 # 评论体
                 repl = reviewDataVO['reviewDataVO']['reviewData']['reviewBody']
                 # print(repl)
                 # print(repl)
-                repl = re.sub('<svgmtsi class="review">', '', reviewDataVO['reviewDataVO']['reviewData']['reviewBody'])
-                repl = re.sub('</svgmtsi>', '', repl)
+                # repl = re.sub('<svgmtsi class="review">', '', reviewDataVO['reviewDataVO']['reviewData']['reviewBody'])
+                # repl = re.sub('</svgmtsi>', '', repl)
                 repl = re.sub(r'<br />', '', repl, re.DOTALL)
+                repl = re.sub(r'<img class=".*?" src=".*?" alt=""/>', '', repl, re.DOTALL)
+                repl = re.sub(r'&nbsp;', '', repl, re.DOTALL)
+                mid_re.append(repl)
                 print(repl)
             # print(reviewAllDOList)
+            item['review'] = mid_re
+            item['shop_name'] = self.shop_name
             with open('data.json', 'w', encoding='utf-8') as fp:
                 json.dump(data, fp, ensure_ascii=False)
 
