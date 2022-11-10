@@ -10,5 +10,6 @@ class XcrawlspiderItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
     review = scrapy.Field()
-    print(review)
+    city = scrapy.Field()
+    shop_url = scrapy.Field()
     # pass

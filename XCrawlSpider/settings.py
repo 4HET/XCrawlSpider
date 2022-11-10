@@ -66,6 +66,7 @@ ROBOTSTXT_OBEY = False
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    'XCrawlSpider.pipelines.XcrawlspiderPipeline': 300,
+   'XCrawlSpider.pipelines.LogPipeline': 301,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
