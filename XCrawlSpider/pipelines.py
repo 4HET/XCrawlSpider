@@ -16,8 +16,8 @@ class XcrawlspiderPipeline:
         print(review, city, shop_url)
         # pandas写入csv
         import pandas as pd
-        df = pd.DataFrame({'city': city,'shop_url': shop_url, 'review': review})
-        df.to_csv(f'./reviews/{city}.csv', mode='a', index=False, header=False, encoding='utf-8-sig')
+        df = pd.DataFrame({'city': city, 'shop_url': shop_url, 'review': review})
+        # df.to_csv(f'./reviews/{city}.csv', mode='a', index=False, header=False, encoding='utf-8-sig')
         # print(review)
         return item
 
@@ -26,7 +26,7 @@ class LogPipeline:
         # pandas写入csv
         import pandas as pd
         df = pd.DataFrame({'city': item['city'], 'shop_url': item['shop_url']}, index=[0])
-        df.to_csv('./log.csv', mode='a', index=False, header=False, encoding='utf-8-sig')
+        # df.to_csv('./log.csv', mode='a', index=False, header=False, encoding='utf-8-sig')
         # print(review)
         print(item)
         return item
