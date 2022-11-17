@@ -3,7 +3,7 @@ from fake_useragent import UserAgent
 from lxml import etree
 import re
 
-from font_processor import woff_to_json
+# from font_processor import woff_to_json
 
 """
 获得css文件的url
