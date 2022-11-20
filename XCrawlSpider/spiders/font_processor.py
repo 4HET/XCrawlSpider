@@ -65,11 +65,11 @@ def identify_word(_ttf_path):
         # print(glyph_name, word)
     info_dict = dict(zip(all_glyph_name, all_word))
     print(info_dict)
-    json_path = "./json/shop_name.json"
+    json_path = "./json/review.json"
     with open(json_path, "w", encoding='utf-8') as f:
         # json.dump(dict_, f)  # 写为一行
         json.dump(info_dict, f, indent=2, sort_keys=True, ensure_ascii=False)  # 写为多行
-        print("键值对获取成功，路径为{}".format("./json/shop_name.json"))
+        print("键值对获取成功，路径为{}".format("./json/review.json"))
     return json_path
 
     # info_json = json.dumps(info_dict, ensure_ascii=False)

@@ -3,6 +3,8 @@ from fake_useragent import UserAgent
 from lxml import etree
 import re
 
+from XCrawlSpider.spiders.font_processor import woff_to_json
+
 # from font_processor import woff_to_json
 
 """
@@ -36,26 +38,28 @@ woff地址:./woff/shop_name.woff
 """
 def shop_name_css_url_getter(url):
     headers = {
-        'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Mobile Safari/537.36',
+        'User-Agent': UserAgent().random,
         # "User-Agent": UserAgent().random,
-        "Host": "s3plus.meituan.net"
     }
 
     css_response = requests.get(url=url, headers=headers)
 
+    print(url)
     #注意此处的编码
     css_response.encoding = 'windows-1252'
+    print(css_response.text)
+
 
     #保存css文件
     # with open('./css/all_font.css','w',encoding='UTF-8') as f:
     #     f.write(css_response.text)
         # print(css_response.text)
 
-    font_group = re.search(r'url\("(.*?)"\);} .shopNum', css_response.text)
+    font_group = re.search(r'url\("(.*?)"\);} .review', css_response.text)
     font_url = 'http:' + font_group[1].split('"')[-1]
     print("shop name的css url:", font_url)
 
-    woff_path = './woff/shop_name.woff'
+    woff_path = './woff/review.woff'
     myfile = requests.get(url=font_url, headers=headers)
     open(woff_path, 'wb').write(myfile.content)
     print('字体样式css已获取成功')
@@ -77,5 +81,6 @@ if __name__ == '__main__':
     #     so = fp.read()
     # url = css_url_getter(so)
     # shop_name_css_url_getter(url)
-    woff_path = './woff/shop_name.woff'
+    # woff_path = './woff/shop_name.woff'
+    woff_path = shop_name_css_url_getter('http://s3plus.meituan.net/v1/mss_0a06a471f9514fc79c981b5466f56b91/svgtextcss/058cb4aa94304abe8addd75c9a0ce4c2.css')
     shop_name_json_getter(woff_path)
